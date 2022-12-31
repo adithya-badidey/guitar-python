@@ -1,7 +1,10 @@
 import re
 
 notes = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
+flats = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
 ntoi = {value:index for index, value in enumerate(notes)}
+for index, value in enumerate(flats):
+  ntoi[value] = index
 iton = {index:value for index, value in enumerate(notes)}
 
 note_splitter = re.compile("([a-zA-z#]+)([0-9]+)")
