@@ -16,6 +16,8 @@ class Note:
             # print(self.n)
         elif isinstance(note, int):
             self.n = note
+        else:
+            raise Exception(f"Unknown dtype for note: {type(note)}")
     
     def __add__(self, i):
         return Note(self.n + i)
@@ -71,22 +73,34 @@ class Guitar:
         print()
 
 class NoteSet:
+    """
+    A noteset is a particular set of notes. Unlike a scale, 
+    its supposed to be very specific to the particular note
+    """
     def __init__(self, progression, root=None):
       if root is not None:
-        self.root = root.getRootNoteIndex()
-        self.prog = [(self.root + p)%len(notes) for p in progression]
+        self.root = root
+        self.prog = [self.root + p for p in progression]
       else:
         self.prog = progression
-        self.root = self.prog[0]
+        self.root = 0
 
     def __str__(self):
-        return " ".join([iton[i] for i in self.prog])
+        return "".join([f"{str(i):<4}" for i in self.prog])
+
+    def __getitem__(self, item):
+        return self.prog[item]
+    
+    def __len__(self):
+        return len(self.prog)
 
     def __contains__(self, x):
       if isinstance(x, Note):
         return x.getRootNoteIndex() in self.prog
       elif isinstance(x, NoteSet):
         return sum(1 for i in x.prog if i in self.prog) == len(x.prog)
+      else:
+        return False
 
     def getRootNoteIndex(self):
         return self.root
